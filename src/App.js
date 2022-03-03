@@ -4,25 +4,26 @@ import { Lightning, Utils, Img } from '@lightningjs/sdk'
 import List from './Components/List'
 import Button from './Components/Button'
 import ButtonBack from './Components/ButtonBack'
+import routes from './routes'
+import Picture from './Components/Picture'
 
 let isPicture = false
 
 export default class App extends Router.App {
-  _setup() {
-    Router.startRouter(routes)
-  }
   static _template() {
     return {
-      Buttons: {
-        LeftButton: { x: 500, type: Button, buttonText: 'Images' },
-        RightButton: { x: 900, type: Button, buttonText: 'Rectangles' },
-      },
-      List: {
-        List1: { y: 100, type: List },
-        List2: { y: 300, type: List },
-      },
-      Message: {
-        y: 10,
+      Home: {
+        Buttons: {
+          LeftButton: { x: 500, type: Button, buttonText: 'Images' },
+          RightButton: { x: 900, type: Button, buttonText: 'Rectangles' },
+        },
+        List: {
+          List1: { y: 100, type: List },
+          List2: { y: 300, type: List },
+        },
+        Message: {
+          y: 10,
+        },
       },
       Picture: {},
     }
@@ -53,6 +54,11 @@ export default class App extends Router.App {
       this._setState('List')
     }
   }
+
+  _setup() {
+    Router.startRouter(routes)
+  }
+
   static _states() {
     return [
       class Buttons extends this {
@@ -75,7 +81,6 @@ export default class App extends Router.App {
       class List extends this {
         _handleUp() {
           if (this.listIndex === 0) {
-            console.log(this.listIndex, '-ggggggggg-ggggggggg-gggggg-')
             this._setState('Buttons')
           } else if (this.listIndex === 1) {
             this.listIndex = 0
@@ -136,32 +141,13 @@ export default class App extends Router.App {
         },
         ButtonBack: { type: ButtonBack },
       })
-      this.tag('Buttons').patch({
-        LeftButton: undefined,
-        RightButton: undefined,
-      }),
-        this.tag('List').patch({
-          List1: undefined,
-          List2: undefined,
-        }),
-        this.tag('Message').patch({
-          text: undefined,
-        }),
-        this._setState('ButtonBack')
+      Router.navigate('home/picture')
+      this._setState('ButtonBack')
     }
   }
 
   $changeLayoutToBoxes() {
-    this._setState('Buttons')
-
-    this.tag('Picture').patch({
-      w: 1920,
-      h: 1080,
-      color: 0xfffbb03b,
-      src: undefined,
-      ButtonBack: undefined,
-      text: undefined,
-    })
+    Router.back()
   }
 
   $changeLayout() {
